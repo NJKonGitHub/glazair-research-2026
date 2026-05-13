@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Glazair Fleet Glass Operations Research 2026</title>
+<link rel="stylesheet" href="assets/glazair_tokens.css">
+<style>
+  /* ------------------------------------------------------------------
+     RESET + BASE
+  ------------------------------------------------------------------ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--fg-primary);
+    background: var(--bg-surface);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  img, svg { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; }
+  a { color: inherit; }
+
+  /* ------------------------------------------------------------------
+     LAYOUT
+  ------------------------------------------------------------------ */
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  section + section { border-top: 1px solid var(--color-neutral-100); }
+  section { padding: 56px 0; }
+  @media (min-width: 720px) { section { padding: 80px 0; } }
+
+  /* ------------------------------------------------------------------
+     TOP NAV — tiny, restrained
+  ------------------------------------------------------------------ */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    border-bottom: 1px solid var(--color-neutral-100);
+  }
+  .topbar-inner {
+    max-width: 760px; margin: 0 auto;
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: inline-flex; align-items: center;
+    text-decoration: none;
+    /* trim the wordmark's built-in glow padding so it visually aligns flush-left */
+    margin-left: -10px;
+  }
+  .brand img {
+    height: 44px;
+    width: auto;
+    display: block;
+  }
+  .topbar-meta {
+    font-size: 12px;
+    color: var(--fg-tertiary);
+    letter-spacing: 0.02em;
+  }
+  .topbar-meta .dot {
+    display: inline-block; width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--color-success-500);
+    margin-right: 6px; vertical-align: middle;
+  }
+
+  /* ------------------------------------------------------------------
+     HERO
+  ------------------------------------------------------------------ */
+  .hero {
+    position: relative;
+    padding: 56px 0 64px;
+    overflow: hidden;
+  }
+  @media (min-width: 720px) { .hero { padding: 88px 0 96px; } }
+
+  /* very subtle grid background */
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(17,24,39,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(17,24,39,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: center;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 30%, transparent 75%);
+            mask-image: radial-gradient(ellipse at 50% 30%, #000 30%, transparent 75%);
+    pointer-events: none;
+  }
+
+  .hero-inner { position: relative; }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px;
+    font-weight: var(--font-semibold);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-primary-700);
+    padding: 6px 10px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-50);
+    border: 1px solid #DBEAFE;
+  }
+  .eyebrow .bar {
+    width: 14px; height: 1px; background: var(--color-primary-700);
+    opacity: 0.7;
+  }
+
+  .hero h1 {
+    margin: 24px 0 0;
+    font-size: clamp(30px, 6.5vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: var(--color-neutral-900);
+    text-wrap: balance;
+  }
+  .hero h1 .accent {
+    color: var(--color-primary-700);
+    white-space: nowrap;
+  }
+
+  .hero-sub {
+    margin: 18px 0 0;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--color-neutral-700);
+    max-width: 38ch;
+    text-wrap: pretty;
+  }
+  @media (min-width: 720px) {
+    .hero-sub { font-size: 19px; max-width: 56ch; }
+  }
+
+  .hero-intro {
+    margin: 28px 0 0;
+    padding: 20px 22px;
+    background: var(--color-neutral-50);
+    border: 1px solid var(--color-neutral-100);
+    border-radius: var(--radius-lg);
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--color-neutral-700);
+    text-wrap: pretty;
+  }
+
+  .hero-cta-row {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  @media (min-width: 480px) {
+    .hero-cta-row { flex-direction: row; align-items: center; flex-wrap: wrap; gap: 16px 20px; }
+  }
+
+  .btn-primary {
+    appearance: none; border: 0; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px 22px;
+    font-size: 15px; font-weight: var(--font-semibold);
+    color: var(--btn-primary-text);
+    background: var(--btn-primary-bg);
+    border-radius: var(--radius-md);
+    transition: background-color .15s ease;
+    text-decoration: none;
+    box-shadow: 0 1px 0 rgba(29,78,216,0.15), 0 6px 16px rgba(59,130,246,0.18);
+  }
+  .btn-primary:hover { background: var(--btn-primary-hover); }
+  .btn-primary:active { background: var(--color-primary-700); }
+  .btn-primary svg { width: 16px; height: 16px; }
+
+  .btn-ghost {
+    appearance: none; border: 1px solid var(--color-neutral-200); cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 18px;
+    font-size: 14.5px; font-weight: var(--font-semibold);
+    color: var(--color-neutral-800);
+    background: #fff;
+    border-radius: var(--radius-md);
+    transition: border-color .15s ease, background-color .15s ease;
+    text-decoration: none;
+  }
+  .btn-ghost:hover { border-color: var(--color-neutral-400); background: var(--color-neutral-50); }
+
+  .meta-line {
+    margin-top: 22px;
+    display: flex; flex-direction: column; gap: 6px;
+    font-size: 13px;
+    color: var(--color-neutral-600);
+  }
+  .meta-line .row { display: inline-flex; align-items: center; gap: 8px; }
+  .meta-line svg { width: 14px; height: 14px; color: var(--color-neutral-500); flex: none; }
+
+  /* ------------------------------------------------------------------
+     SECTION HEADERS
+  ------------------------------------------------------------------ */
+  .section-head {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 28px;
+  }
+  .section-num {
+    font-size: 12px;
+    font-weight: var(--font-semibold);
+    letter-spacing: 0.16em;
+    color: var(--color-primary-600);
+    font-variant-numeric: tabular-nums;
+  }
+  .section-title {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    font-weight: 700;
+    color: var(--color-neutral-900);
+  }
+  @media (min-width: 720px) {
+    .section-title { font-size: 28px; }
+  }
+  .section-lede {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-neutral-700);
+    max-width: 64ch;
+    text-wrap: pretty;
+  }
+
+  /* ------------------------------------------------------------------
+     ABOUT
+  ------------------------------------------------------------------ */
+  .about-grid { display: grid; gap: 20px; }
+  .about-aside {
+    padding: 18px 20px;
+    border-left: 2px solid var(--color-primary-500);
+    background: linear-gradient(to right, rgba(59,130,246,0.04), transparent 60%);
+    font-size: 14px;
+    color: var(--color-neutral-700);
+  }
+  .about-aside .k {
+    display: block;
+    font-size: 11px; font-weight: var(--font-semibold);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-neutral-500);
+    margin-bottom: 6px;
+  }
+  .about-aside .v { font-size: 14.5px; color: var(--color-neutral-900); font-weight: 500; }
+  .about-stats {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--color-neutral-100);
+    border: 1px solid var(--color-neutral-100);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .about-stat { background: #fff; padding: 16px 18px; }
+  .about-stat .label {
+    font-size: 11px; font-weight: var(--font-semibold);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-neutral-500);
+  }
+  .about-stat .value {
+    margin-top: 6px;
+    font-size: 15px; font-weight: 600;
+    color: var(--color-neutral-900);
+    letter-spacing: -0.01em;
+  }
+
+  /* ------------------------------------------------------------------
+     RESEARCH FOCUS GRID
+  ------------------------------------------------------------------ */
+  .focus-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--color-neutral-100);
+    border: 1px solid var(--color-neutral-100);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  @media (min-width: 560px) { .focus-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 760px) { .focus-grid { grid-template-columns: repeat(4, 1fr); } }
+
+  .focus-item {
+    background: #fff;
+    padding: 22px 20px 24px;
+    display: flex; flex-direction: column; gap: 12px;
+    transition: background-color .15s ease;
+    position: relative;
+  }
+  .focus-item:hover { background: var(--color-neutral-50); }
+  .focus-item:hover .focus-icon { color: var(--color-primary-700); border-color: var(--color-primary-200); }
+
+  .focus-icon {
+    width: 36px; height: 36px;
+    display: grid; place-items: center;
+    color: var(--color-primary-600);
+    border: 1px solid var(--color-neutral-200);
+    border-radius: var(--radius-md);
+    background: #fff;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .focus-icon svg { width: 18px; height: 18px; }
+
+  .focus-num {
+    position: absolute; top: 14px; right: 16px;
+    font-size: 11px; font-weight: 600;
+    color: var(--color-neutral-400);
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+  }
+  .focus-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--color-neutral-900);
+    letter-spacing: -0.005em;
+    line-height: 1.3;
+  }
+  .focus-desc {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--color-neutral-600);
+  }
+
+  /* ------------------------------------------------------------------
+     PARTICIPATION
+  ------------------------------------------------------------------ */
+  .participation-meta {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 22px 0 28px;
+  }
+  @media (min-width: 560px) {
+    .participation-meta { grid-template-columns: repeat(3, 1fr); }
+  }
+  .pm-item {
+    padding: 14px 16px;
+    background: var(--color-neutral-50);
+    border: 1px solid var(--color-neutral-100);
+    border-radius: var(--radius-md);
+  }
+  .pm-item .label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--color-neutral-500);
+  }
+  .pm-item .value {
+    margin-top: 4px;
+    font-size: 14px; font-weight: 500;
+    color: var(--color-neutral-900);
+  }
+
+  .survey-embed {
+    position: relative;
+    margin-top: 12px;
+    border: 1px dashed var(--color-neutral-300);
+    border-radius: var(--radius-lg);
+    background:
+      repeating-linear-gradient(135deg, rgba(59,130,246,0.025) 0 10px, transparent 10px 20px),
+      #fff;
+    min-height: 320px;
+    padding: 32px 24px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    gap: 14px;
+  }
+  .survey-embed .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-neutral-500);
+    padding: 4px 10px;
+    background: #fff;
+    border: 1px solid var(--color-neutral-200);
+    border-radius: var(--radius-full);
+  }
+  .survey-embed .badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--color-warning-500);
+  }
+  .survey-embed h3 {
+    margin: 0; font-size: 17px; font-weight: 600;
+    color: var(--color-neutral-900);
+  }
+  .survey-embed p {
+    margin: 0; font-size: 13.5px;
+    color: var(--color-neutral-600);
+    max-width: 40ch;
+    line-height: 1.55;
+  }
+  .survey-embed .note {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--color-neutral-500);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    padding: 4px 8px;
+    background: var(--color-neutral-50);
+    border-radius: var(--radius-sm);
+  }
+  .survey-embed .glyph {
+    width: 44px; height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary-50);
+    color: var(--color-primary-600);
+    display: grid; place-items: center;
+  }
+  .survey-embed .glyph svg { width: 22px; height: 22px; }
+  .survey-embed .lang-note {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12.5px;
+    color: var(--color-neutral-700);
+    background: #fff;
+    border: 1px solid var(--color-neutral-200);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+  }
+  .survey-embed .lang-note svg { width: 13px; height: 13px; color: var(--color-primary-600); }
+  .survey-embed .lang-note span { color: var(--color-neutral-500); }
+
+  /* ------------------------------------------------------------------
+     ACCORDIONS
+  ------------------------------------------------------------------ */
+  .acc-wrap { display: flex; flex-direction: column; gap: 12px; }
+  details.acc {
+    border: 1px solid var(--color-neutral-100);
+    background: #fff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color .15s ease, background-color .15s ease;
+  }
+  details.acc[open] { border-color: var(--color-neutral-200); background: #fff; }
+  details.acc summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 18px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--color-neutral-900);
+  }
+  details.acc summary::-webkit-details-marker { display: none; }
+  .acc-sub {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-neutral-500);
+    letter-spacing: 0.04em;
+  }
+  .acc-left { display: flex; flex-direction: column; gap: 2px; }
+  .acc-chev {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--color-neutral-200);
+    display: grid; place-items: center;
+    transition: transform .2s ease, border-color .15s ease, background-color .15s ease;
+    flex: none;
+  }
+  details.acc[open] .acc-chev { transform: rotate(180deg); background: var(--color-neutral-50); }
+  .acc-chev svg { width: 12px; height: 12px; color: var(--color-neutral-600); }
+  .acc-body {
+    padding: 4px 20px 22px;
+    color: var(--color-neutral-700);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .acc-body p { margin: 0 0 12px; }
+  .acc-body p:last-child { margin-bottom: 0; }
+  .acc-body .placeholder {
+    margin-top: 6px;
+    padding: 14px 16px;
+    background: var(--color-neutral-50);
+    border: 1px dashed var(--color-neutral-300);
+    border-radius: var(--radius-md);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12.5px;
+    color: var(--color-neutral-600);
+  }
+
+  /* ------------------------------------------------------------------
+     FOOTER
+  ------------------------------------------------------------------ */
+  footer.footer {
+    border-top: 1px solid var(--color-neutral-100);
+    background: var(--color-neutral-50);
+    padding: 32px 0 40px;
+    margin-top: 24px;
+  }
+  .footer-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  @media (min-width: 560px) {
+    .footer-inner { flex-direction: row; align-items: center; justify-content: space-between; }
+  }
+  .footer-brand {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 13px; color: var(--color-neutral-600);
+  }
+  .footer-brand img {
+    height: 52px;
+    width: auto;
+    display: block;
+    margin-left: -12px;
+  }
+  .footer-brand-text { display: flex; flex-direction: column; gap: 2px; }
+  .footer-brand strong { color: var(--color-neutral-900); font-weight: 600; }
+  .footer-brand .sub { font-size: 11.5px; color: var(--color-neutral-500); letter-spacing: 0.02em; }
+  .footer-links { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .footer-links a {
+    color: var(--color-neutral-600);
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .footer-links a:hover { color: var(--color-neutral-900); }
+  .footer-links .icon-link {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--color-neutral-200);
+    display: grid; place-items: center;
+    background: #fff;
+  }
+  .footer-links .icon-link svg { width: 13px; height: 13px; }
+  .footer-meta {
+    margin-top: 18px;
+    padding: 0 24px;
+    max-width: 760px; margin-left: auto; margin-right: auto;
+    font-size: 11.5px;
+    color: var(--color-neutral-500);
+    letter-spacing: 0.02em;
+  }
+
+  /* small util */
+  .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR ----------------------------------------------------------------->
+<header class="topbar" data-screen-label="Top bar">
+  <div class="topbar-inner">
+    <a href="#top" class="brand" aria-label="Glazair">
+      <img src="assets/glazair_logo.svg" alt="Glazair">
+    </a>
+    <div class="topbar-meta"><span class="dot"></span>Research · Austria · 2026</div>
+  </div>
+</header>
+
+<main id="top" class="page">
+
+  <!-- HERO ----------------------------------------------------------------->
+  <section class="hero" data-screen-label="Hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <span class="eyebrow"><span class="bar"></span>Industry Research Initiative</span>
+
+      <h1>
+        Glazair Fleet Glass Operations <span class="accent">Research 2026</span>
+      </h1>
+
+      <p class="hero-sub">
+        Benchmarking transparency, efficiency, and coordination challenges in fleet glass servicing.
+      </p>
+
+      <p class="hero-intro">
+        The Glazair Fleet Glass Operations Research 2026 is an industry initiative exploring
+        operational practices, coordination challenges, and service expectations in automotive
+        glass servicing for fleet operators in Austria. The objective of the research is to
+        better understand current workflows, transparency gaps, procurement priorities, and
+        operational pain points across the market.
+      </p>
+
+      <div class="hero-cta-row">
+        <a href="#participation" class="btn-primary">
+          Participate in the Research
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="M13 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#about" class="btn-ghost">About the initiative</a>
+      </div>
+
+      <div class="meta-line">
+        <span class="row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+          </svg>
+          Estimated completion time: 5–7 minutes
+        </span>
+        <span class="row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h10"/>
+          </svg>
+          Participants receive an anonymized benchmark summary after completion.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT ---------------------------------------------------------------->
+  <section id="about" data-screen-label="About">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">About the Initiative</h2>
+    </div>
+
+    <div class="about-grid">
+      <p class="section-lede">
+        Glazair is a private industry initiative formed by professionals with long-standing
+        experience in automotive glass replacement and fleet-related service operations.
+        Through previous industry experience, recurring operational fragmentation, limited
+        visibility, and coordination challenges were identified across fleet glass servicing
+        workflows involving multiple providers and regions.
+      </p>
+      <p class="section-lede">
+        The purpose of this research initiative is to better understand operational realities,
+        market expectations, and potential opportunities for workflow improvement within the
+        sector.
+      </p>
+
+      <div class="about-stats" role="list" aria-label="Initiative facts">
+        <div class="about-stat" role="listitem">
+          <div class="label">Scope</div>
+          <div class="value">Austria · Fleet glass servicing</div>
+        </div>
+        <div class="about-stat" role="listitem">
+          <div class="label">Format</div>
+          <div class="value">Anonymized survey, aggregated reporting</div>
+        </div>
+        <div class="about-stat" role="listitem">
+          <div class="label">Audience</div>
+          <div class="value">Fleet, mobility &amp; procurement professionals</div>
+        </div>
+        <div class="about-stat" role="listitem">
+          <div class="label">Conducted by</div>
+          <div class="value">Glazair Research Initiative</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH FOCUS ------------------------------------------------------->
+  <section id="focus" data-screen-label="Research focus">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Research Focus</h2>
+    </div>
+    <p class="section-lede" style="margin-bottom: 28px;">
+      Eight themes structure the research, each examined through the lens of fleet operators
+      working with multiple glass service providers across regions.
+    </p>
+
+    <div class="focus-grid">
+      <!-- 1 -->
+      <article class="focus-item">
+        <span class="focus-num">01</span>
+        <div class="focus-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div class="focus-title">Operational transparency</div>
+        <div class="focus-desc">Visibility across providers, jobs, statuses and outcomes.</div>
+      </article>
+
+      <!-- 2 -->
+      <article class="focus-item">
+        <span class="focus-num">02</span>
+        <div class="focus-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/>
+            <path d="M6 8.4v3.2A2.4 2.4 0 0 0 8.4 14h7.2A2.4 2.4 0 0 0 18 11.6V8.4"/><path d="M12 14v1.6"/>
+          </svg>
+        </div>
+        <div class="focus-title">Coordination efficiency</div>
+        <div class="focus-desc">Handoffs between fleet, driver, workshop and insurer.</div>
+      </article>
+
+      <!-- 3 -->
+      <article class="focus-item">
+        <span class="focus-num">03</span>
+        <div class="focus-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+        </div>
+        <div class="focus-title">Service consistency</div>
+        <div class="focus-desc">Quality and process uniformity across locations.</div>
+      </article>
+
+      <!-- 4 -->
+      <article class="focus-item">
+        <span class="focus-num">04</span>
+        <div class="focus-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>
+            <path d="M9 13h6"/><path d="M9 17h4"/>
+          </svg>
+        </div>
+        <div class="focus-title">Administrative burden</div>
+        <div class="focus-desc">Documentation, approvals and reconciliation overhead.</div>
+      </article>
+
+      <!-- 5 -->
+      <article class="focus-item">
+        <span class="focus-num">05</span>
+        <div class="focus-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.4-3.4 4-5 7-5s5.6 1.6 7 5"/>
+          </svg>
+        </div>
+        <div class="focus-title">Driver-supported workflows</div>
+        <div class="focus-desc">How drivers report, schedule and complete glass jobs.</div>
+      </article>
+
+      <!-- 6 -->
+      <article class="focus-item">
+        <span class="focus-num">06</span>
+        <div class="focus-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-8"/><path d="M22 20H2"/>
+          </svg>
+        </div>
+        <div class="focus-title">Reporting &amp; visibility</div>
+        <div class="focus-desc">Aggregated insight for fleet decision-making.</div>
+      </article>
+
+      <!-- 7 -->
+      <article class="focus-item">
+        <span class="focus-num">07</span>
+        <div class="focus-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 9h16"/><path d="M9 13h6"/>
+          </svg>
+        </div>
+        <div class="focus-title">Procurement practices</div>
+        <div class="focus-desc">Provider selection, pricing models and contract scope.</div>
+      </article>
+
+      <!-- 8 -->
+      <article class="focus-item">
+        <span class="focus-num">08</span>
+        <div class="focus-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>
+          </svg>
+        </div>
+        <div class="focus-title">Digital workflow readiness</div>
+        <div class="focus-desc">Adoption of digital tools across operations and partners.</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- PARTICIPATION -------------------------------------------------------->
+  <section id="participation" data-screen-label="Participation">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Participation</h2>
+    </div>
+    <p class="section-lede">
+      The research is intended for professionals involved in fleet operations, mobility
+      management, procurement, leasing, and related service coordination activities. Survey
+      responses are processed anonymously in aggregated form. Participation is voluntary.
+    </p>
+
+    <div class="participation-meta">
+      <div class="pm-item">
+        <div class="label">Duration</div>
+        <div class="value">5–7 minutes</div>
+      </div>
+      <div class="pm-item">
+        <div class="label">Confidentiality</div>
+        <div class="value">Anonymized, aggregated</div>
+      </div>
+      <div class="pm-item">
+        <div class="label">Deliverable</div>
+        <div class="value">Benchmark summary</div>
+      </div>
+    </div>
+
+    <a href="#survey" class="btn-primary" style="margin-bottom: 24px;">
+      Start Survey
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12h14"/><path d="M13 5l7 7-7 7"/>
+      </svg>
+    </a>
+
+    <div id="survey" style="margin-top:12px;">
+      <iframe data-tally-src="https://tally.so/embed/Y5p175?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0" title="Glazair Fleet Glass Operations Research 2026"></iframe>
+      <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+    </div>
+  </section>
+
+  <!-- PRIVACY -------------------------------------------------------------->
+  <section id="privacy" data-screen-label="Privacy">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Legal &amp; Privacy</h2>
+    </div>
+    <p class="section-lede" style="margin-bottom: 24px;">
+      Information on how participant data is handled and the legal entity responsible for
+      this research initiative.
+    </p>
+
+    <div class="acc-wrap">
+      <details class="acc">
+        <summary>
+          <span class="acc-left">
+            <span>Privacy Policy</span>
+            <span class="acc-sub">Data handling, anonymization, retention</span>
+          </span>
+          <span class="acc-chev" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="acc-body">
+          <p>Survey responses are processed anonymously and reported only in aggregated form. No personally identifying information is required to participate.</p>
+          <p><strong>Glazair Fleet Glass Operations Research 2026</strong><br>Last updated: May 2026</p>
+          <p><strong>1. Introduction</strong></p>
+          <p>This privacy policy explains how personal data is collected and processed in connection with the Glazair Fleet Glass Operations Research 2026 initiative. The research initiative is conducted by a private industry initiative formed by professionals with experience in automotive glass replacement and fleet-related service operations. The purpose of the initiative is to better understand operational practices, coordination challenges, and market expectations in fleet glass servicing.</p>
+          <p><strong>2. What Data We Collect</strong></p>
+          <p>Participation in the survey is voluntary. Depending on the information provided, we may collect:</p>
+          <ul>
+            <li>survey responses</li>
+            <li>business-related operational information</li>
+            <li>name</li>
+            <li>company name</li>
+            <li>email address</li>
+            <li>LinkedIn profile information (optional)</li>
+            <li>technical information necessary for operating the website or survey platform</li>
+          </ul>
+          <p>The survey is designed primarily for professional and business-related feedback.</p>
+          <p><strong>3. Purpose of Data Processing</strong></p>
+          <p>The collected information is used for:</p>
+          <ul>
+            <li>conducting market research</li>
+            <li>analyzing aggregated operational trends</li>
+            <li>preparing anonymized benchmark summaries</li>
+            <li>improving understanding of fleet servicing workflows</li>
+            <li>contacting participants who explicitly request follow-up communication</li>
+          </ul>
+          <p>We do not sell personal data to third parties.</p>
+          <p><strong>4. Anonymization &amp; Reporting</strong></p>
+          <p>Survey findings shared externally or with participants will be aggregated and anonymized. Individual responses will not be publicly attributed to specific persons or organizations without explicit permission.</p>
+          <p><strong>5. Legal Basis for Processing</strong></p>
+          <p>Data processing is based on:</p>
+          <ul>
+            <li>voluntary participation</li>
+            <li>legitimate interest in conducting industry research</li>
+            <li>consent where contact details are voluntarily provided for follow-up communication</li>
+          </ul>
+          <p><strong>6. Data Retention</strong></p>
+          <p>Personal data will only be retained for as long as reasonably necessary for the research initiative, communication regarding the benchmark findings, and related follow-up activities. Participants may request deletion of their personal data at any time.</p>
+          <p><strong>7. Third-Party Services</strong></p>
+          <p>The survey and website may use third-party service providers for website hosting, survey collection, analytics, and communication. These providers may process limited technical data necessary for operating the services securely and reliably.</p>
+          <p><strong>8. Your Rights</strong></p>
+          <p>Under applicable data protection laws, participants may request:</p>
+          <ul>
+            <li>access to stored personal data</li>
+            <li>correction of inaccurate data</li>
+            <li>deletion of personal data</li>
+            <li>restriction of processing</li>
+            <li>withdrawal of previously given consent</li>
+          </ul>
+          <p>Requests may be submitted using the contact information below.</p>
+          <p><strong>9. Data Controller</strong></p>
+          <p>The data controller responsible for this research initiative is József Károly Németh, operating the Glazair research initiative as a private industry project.</p>
+          <p><strong>10. Contact</strong></p>
+          <p>For privacy-related questions or requests, please contact:<br>Glazair Research Initiative<br>Email: hello@glazair.com<br>Website: glazair.com</p>
+        </div>
+      </details>
+
+      <details class="acc">
+        <summary>
+          <span class="acc-left">
+            <span>Impressum</span>
+            <span class="acc-sub">Legal disclosure under Austrian law</span>
+          </span>
+          <span class="acc-chev" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="acc-body">
+          <p>Disclosure of the legal entity, contact details, and responsible parties under §5 ECG / §25 MedienG.</p>
+          <p><strong>Responsible for Content</strong></p>
+          <p>József Károly Németh<br>Glazair Research Initiative<br>Veszprém, Hungary<br>Email: hello@glazair.com<br>Website: glazair.com</p>
+          <p><strong>About the Initiative</strong></p>
+          <p>Glazair is a private industry initiative formed by professionals with long-standing experience in automotive glass replacement and fleet-related service operations. The initiative focuses on operational research, workflow transparency, and coordination challenges in fleet glass servicing and related mobility service processes.</p>
+          <p><strong>Purpose of the Website</strong></p>
+          <p>This website is operated for the purpose of:</p>
+          <ul>
+            <li>industry research</li>
+            <li>market benchmarking</li>
+            <li>professional networking</li>
+            <li>information sharing related to the Glazair Fleet Glass Operations Research 2026 initiative</li>
+          </ul>
+          <p>The website may also be used to share aggregated research findings, operational insights, and future developments connected to the initiative.</p>
+          <p><strong>Contact</strong></p>
+          <p>For general inquiries regarding the initiative, please contact:<br>Email: hello@glazair.com</p>
+          <p><strong>Liability for Content</strong></p>
+          <p>The contents of this website are prepared with reasonable care. However, no guarantee is given regarding the completeness, accuracy, or timeliness of the information provided. External links are provided for informational purposes only. Responsibility for the content of linked external websites lies solely with their respective operators.</p>
+          <p><strong>Copyright</strong></p>
+          <p>Unless otherwise indicated, all content published on this website, including texts and research materials, is the property of the Glazair Research Initiative and may not be reproduced, distributed, or used without prior permission.</p>
+          <p><strong>Applicable Jurisdiction</strong></p>
+          <p>This website is operated from Hungary and is intended primarily for professional audiences within the European Union, including Austria. Applicable data protection and privacy practices are aligned with the General Data Protection Regulation (GDPR).</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER ------------------------------------------------------------------>
+<footer class="footer" data-screen-label="Footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="assets/glazair_logo.svg" alt="Glazair">
+      <div class="footer-brand-text">
+        <strong>Research Initiative</strong>
+        <span class="sub">© 2026 · Austria</span>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="#privacy">Privacy Policy</a>
+      <a href="#privacy">Impressum</a>
+    </div>
+  </div>
+  <div class="footer-meta">
+    Glazair Fleet Glass Operations Research 2026 · Conducted in Austria · All survey responses are processed anonymously.
+  </div>
+</footer>
+
+</body>
+</html>

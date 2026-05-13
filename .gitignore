@@ -1,0 +1,12 @@
+.claude/
+.DS_Store
+*.log
+node_modules/
+handoff.tar
+handoff.tar.gz
+handoff_auth.bin
+glazair-website-for-survey/
+privacy_policy.txt
+impressum.txt
+Survey_Privacy_Policy.txt
+Impressum.txt
