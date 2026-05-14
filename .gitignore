@@ -10,3 +10,10 @@ privacy_policy.txt
 impressum.txt
 Survey_Privacy_Policy.txt
 Impressum.txt
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
