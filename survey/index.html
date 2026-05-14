@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Glazair Fleet Glass Operations Research 2026 — Survey</title>
+<link rel="stylesheet" href="../assets/glazair_tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--fg-primary);
+    background: var(--bg-surface);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; }
+
+  /* TOPBAR */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    border-bottom: 1px solid var(--color-neutral-100);
+  }
+  .topbar-inner {
+    max-width: 760px; margin: 0 auto;
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: inline-flex; align-items: center;
+    text-decoration: none;
+    margin-left: -10px;
+  }
+  .brand img { height: 44px; width: auto; display: block; }
+  .topbar-meta { font-size: 12px; color: var(--fg-tertiary); letter-spacing: 0.02em; }
+  .topbar-meta .dot {
+    display: inline-block; width: 5px; height: 5px;
+    border-radius: 50%; background: var(--color-success-500);
+    margin-right: 6px; vertical-align: middle;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+  }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px;
+    font-weight: var(--font-semibold);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-primary-700);
+    padding: 6px 10px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-50);
+    border: 1px solid #DBEAFE;
+  }
+  .eyebrow .bar { width: 14px; height: 1px; background: var(--color-primary-700); opacity: 0.7; }
+
+  .main h1 {
+    margin: 20px 0 0;
+    font-size: clamp(24px, 5vw, 36px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: var(--color-neutral-900);
+    text-wrap: balance;
+  }
+  .main h1 .accent { color: var(--color-primary-700); white-space: nowrap; }
+
+  .survey-note {
+    margin: 12px 0 0;
+    font-size: 13.5px;
+    color: var(--color-neutral-600);
+    letter-spacing: 0.01em;
+  }
+
+  /* FOOTER */
+  footer.footer {
+    border-top: 1px solid var(--color-neutral-100);
+    background: var(--color-neutral-50);
+    padding: 28px 0 36px;
+  }
+  .footer-inner {
+    max-width: 760px; margin: 0 auto;
+    padding: 0 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  @media (min-width: 560px) {
+    .footer-inner { flex-direction: row; align-items: center; justify-content: space-between; }
+  }
+  .footer-brand { display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--color-neutral-600); }
+  .footer-brand img { height: 52px; width: auto; display: block; margin-left: -12px; }
+  .footer-brand-text { display: flex; flex-direction: column; gap: 2px; }
+  .footer-brand strong { color: var(--color-neutral-900); font-weight: 600; }
+  .footer-brand .sub { font-size: 11.5px; color: var(--color-neutral-500); letter-spacing: 0.02em; }
+  .footer-links { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .footer-links a { color: var(--color-neutral-600); text-decoration: none; font-size: 13px; }
+  .footer-links a:hover { color: var(--color-neutral-900); }
+  .footer-meta {
+    max-width: 760px; margin: 14px auto 0;
+    padding: 0 24px;
+    font-size: 11.5px; color: var(--color-neutral-500); letter-spacing: 0.02em;
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../" class="brand" aria-label="Glazair">
+      <img src="../assets/glazair_logo.svg" alt="Glazair">
+    </a>
+    <div class="topbar-meta"><span class="dot"></span>Research · Austria · 2026</div>
+  </div>
+</header>
+
+<main class="main">
+  <span class="eyebrow"><span class="bar"></span>Industry Research Initiative</span>
+  <h1>Glazair Fleet Glass Operations <span class="accent">Research 2026</span></h1>
+  <p class="survey-note">Survey conducted in German · Umfrage auf Deutsch · 5–7 minutes</p>
+
+  <div id="survey" style="margin-top:12px;">
+    <iframe data-tally-src="https://tally.so/embed/Y5p175?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0" title="Glazair Fleet Glass Operations Research 2026"></iframe>
+    <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="../assets/glazair_logo.svg" alt="Glazair">
+      <div class="footer-brand-text">
+        <strong>Research Initiative</strong>
+        <span class="sub">© 2026 · Austria</span>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="../index.html#privacy">Privacy Policy</a>
+      <a href="../index.html#privacy">Impressum</a>
+    </div>
+  </div>
+  <div class="footer-meta">
+    Glazair Fleet Glass Operations Research 2026 · Conducted in Austria · All survey responses are processed anonymously.
+  </div>
+</footer>
+
+</body>
+</html>
