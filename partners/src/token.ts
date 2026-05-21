@@ -3,6 +3,7 @@ export type Lang = 'en' | 'hu' | 'de'
 export interface TokenPayload {
   token_id: string
   lang: Lang
+  exp: number
 }
 
 function base64urlDecode(s: string): Uint8Array {
@@ -30,10 +31,15 @@ export async function verifyToken(token: string): Promise<TokenPayload | null> {
     typeof payloadObj !== 'object' ||
     payloadObj === null ||
     typeof (payloadObj as Record<string, unknown>)['token_id'] !== 'string' ||
-    !['en', 'hu', 'de'].includes((payloadObj as Record<string, unknown>)['lang'] as string)
+    !['en', 'hu', 'de'].includes((payloadObj as Record<string, unknown>)['lang'] as string) ||
+    typeof (payloadObj as Record<string, unknown>)['exp'] !== 'number'
   ) {
     return null
   }
+
+  // Expiry check before HMAC — cheap rejection for stale tokens
+  const exp = (payloadObj as Record<string, unknown>)['exp'] as number
+  if (Math.floor(Date.now() / 1000) > exp) return null
 
   try {
     const keyBytes = new TextEncoder().encode(secret)

@@ -35,14 +35,16 @@ cp .env.example .env
 
 **Payload shape:**
 ```json
-{ "workshop_id": "string", "lang": "en" | "hu" | "de" }
+{ "token_id": "string", "lang": "en" | "hu" | "de", "exp": 1234567890 }
 ```
+
+`exp` is a Unix timestamp (seconds). Tokens without `exp` are rejected.
 
 **Signature:** HMAC-SHA256 of the base64url-encoded payload string, keyed with `PORTAL_TOKEN_SECRET`.
 
 **Invitation URL:** `https://partners.glazair.com/{token}`
 
-The portal extracts the token from `window.location.pathname` (first path segment), verifies the HMAC, then renders the portal in the language encoded in the payload. If invalid or absent, a neutral error screen is shown with no Glazair branding.
+The portal extracts the token from `window.location.pathname` (first path segment), verifies the HMAC, checks expiry, then renders the portal in the language encoded in the payload. If the token is invalid, expired, or over the use limit, a neutral error screen is shown with no Glazair branding.
 
 Language can be overridden at runtime via the language selector; the choice persists in `sessionStorage` under the key `glazair_portal_lang` for the session duration.
 
@@ -51,23 +53,28 @@ Language can be overridden at runtime via the language selector; the choice pers
 ## Token generation CLI
 
 ```sh
-node scripts/generate-token.js --token-id=<id> --lang=<en|hu|de>
+node scripts/generate-token.js --token-id=<id> --lang=<en|hu|de> [--expires-in=<days>]
 ```
 
-Reads `PORTAL_TOKEN_SECRET` from `.env` in the repo root (or from the environment). Prints the full invitation URL to stdout; nothing else.
+Reads `PORTAL_TOKEN_SECRET` from `.env` in the repo root (or from the environment). Prints the invitation URL to stdout and the expiry timestamp to stderr.
+
+`--expires-in` defaults to **7 days**. Pass a positive integer to override (e.g. `--expires-in=14`).
 
 **Examples:**
 ```sh
 node scripts/generate-token.js --token-id=HU-DEMO-001 --lang=hu
-# → https://partners.glazair.com/eyJ0b2tlbl9pZCI6IkhVLURFTU8tMDAxIiwibGFuZyI6Imh1In0.<sig>
+# stderr → Expires: 2026-05-28T10:00:00.000Z
+# stdout → https://partners.glazair.com/<token>
 
-node scripts/generate-token.js --token-id=AT-TEST-007 --lang=de
-# → https://partners.glazair.com/...
+node scripts/generate-token.js --token-id=AT-WORKSHOP-007 --lang=de --expires-in=14
+# stderr → Expires: 2026-06-04T10:00:00.000Z
+# stdout → https://partners.glazair.com/<token>
 ```
 
 **Error cases** (exit code 1, message to stderr):
 - `--token-id` missing
 - `--lang` missing or not one of `en`, `hu`, `de`
+- `--expires-in` not a positive number
 - `PORTAL_TOKEN_SECRET` not set
 
 The script uses Node.js built-in `crypto` — no extra dependencies needed.
@@ -166,6 +173,40 @@ All events include `token_id` and `lang`.
 5. Add it to `partners/.env` (local) and your CI / Cloudflare Pages environment as `VITE_ANALYTICS_ENDPOINT`
 
 The script appends one row per event to Sheet1, auto-creating a header row on first write.
+
+---
+
+## Edge gate — token expiry and use-count limiting
+
+The file `partners/functions/[[path]].js` is a **Cloudflare Pages Function** that intercepts every request before the SPA loads. For any URL that matches the token path pattern it:
+
+1. Decodes the payload and rejects expired tokens (`exp` in the past)
+2. Reads a per-token use counter from **Cloudflare KV** and rejects if ≥ 3 opens
+3. Otherwise increments the counter (TTL = remaining token lifetime + 1 day) and passes through
+
+The SPA performs its own independent HMAC and expiry check as a second layer.
+
+### One-time Cloudflare setup
+
+1. **Create the KV namespace**
+   Workers & Pages → KV → Create namespace → name it `portal-use-counts`
+
+2. **Bind it to the Pages project**
+   Pages → `partners-glazair-com` → Settings → Functions → KV namespace bindings → Add:
+   - Variable name: `PORTAL_USE_COUNTS`
+   - KV namespace: `portal-use-counts`
+
+3. **Redeploy** — the binding takes effect on the next deployment.
+
+### Local development
+
+`vite dev` does not run Pages Functions — the gate is skipped. This is fine for portal development. To test the full stack locally:
+
+```sh
+cd partners
+npm run build
+npx wrangler pages dev dist --kv PORTAL_USE_COUNTS
+```
 
 ---
 
