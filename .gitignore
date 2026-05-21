@@ -11,6 +11,10 @@ impressum.txt
 Survey_Privacy_Policy.txt
 Impressum.txt
 
+# partners portal build output
+partners/dist/
+partners/node_modules/
+
 # wrangler files
 .wrangler
 .dev.vars*
