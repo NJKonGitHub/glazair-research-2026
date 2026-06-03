@@ -36,7 +36,6 @@ export default function Header({ currentLang }: Props) {
   }, [])
 
   function handleSelect(lang: Lang) {
-    if (lang === 'de') return
     analytics.post('language_change', { from_lang: currentLang, to_lang: lang })
     switchLang(lang)
     setOpen(false)
@@ -78,7 +77,7 @@ export default function Header({ currentLang }: Props) {
             <div className="lang__menu" role="listbox" aria-label={t('lang_selector_label')}>
               {LANGS.map((l) => {
                 const isActive = l.code === currentLang
-                const isDisabled = l.code === 'de'
+                const isDisabled = false
                 return (
                   <div
                     key={l.code}
