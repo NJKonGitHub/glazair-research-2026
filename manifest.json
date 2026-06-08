@@ -1,0 +1,21 @@
+{
+  "name": "Glazair",
+  "short_name": "Glazair",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1d4ed8",
+  "description": "Glazair Fleet Glass Operations Research 2026",
+  "icons": [
+    {
+      "src": "assets/apple-touch-icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/apple-touch-icon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
